@@ -1,4 +1,4 @@
-<h1 align="center">Hi 👋, I'm Bảo</h1>
+<h1>Hi 👋, I'm Bảo</h1>
 
 - 🔭 I’m currently working at **University of Information Technology**
 - 🌱 I’m passionate about **Software Engineering**, **IoT**, and **Wireless Embedded Systems**
