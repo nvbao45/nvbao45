@@ -3,7 +3,6 @@
 - 🔭 I’m currently working at **University of Information Technology**
 - 🌱 I’m passionate about **Software Engineering**, **IoT**, and **Wireless Embedded Systems**
 - 💻 I enjoy solving problems on platforms like **LeetCode** and **HackerRank**
-- 📫 How to reach me: [nvbao45@uit.edu.vn](mailto:nvbao45@uit.edu.vn)
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
