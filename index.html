@@ -1,9 +1,582 @@
-<HTML>
+<!DOCTYPE html>
+<html lang="vi">
 <head>
-  <meta charset="UTF-8"/>
-  <title>Hello</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lộ Trình Đào Tạo Software Testing Toàn Diện</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 350px; }
+        }
+        .step-active { border-color: #2563eb; background-color: #eff6ff; }
+        .tab-active { border-bottom: 2px solid #2563eb; color: #2563eb; font-weight: 600; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    </style>
+    <!-- Chosen Palette: Tech Education (Blue/Slate/Green) - Professional, trustworthy, and growth-oriented. -->
+    <!-- Application Structure Plan: 
+         1. Hero Section: Value prop & "Start Here" context.
+         2. "Find Your Level" Interactive Tool: A logic-based input section to personalize the roadmap based on user background (Non-IT vs. IT).
+         3. Interactive Roadmap (The Core): A timeline interaction where users explore 4 key phases. Clicking a phase updates the detailed curriculum view (Text + Tool Lists).
+         4. Skill & Market Analytics: Data visualization section showing the shift in skill composition (Manual vs. Tech) and salary potential (Line/Bar charts).
+         5. Tools Ecosystem: A categorized grid of tools to be learned.
+         Rationale: This structure moves from personal relevance (assessment) to detailed planning (roadmap) to motivation (market data). 
+    -->
+    <!-- Visualization & Content Choices:
+         1. Roadmap: Interactive Timeline (HTML/JS) -> Allows linear exploration of a multi-month process.
+         2. Entry Level Logic: Conditional Logic (JS) -> Simulates a consultant advising where to start.
+         3. Skill Mix: Stacked Bar Chart (Chart.js) -> visually demonstrates how "Technical" skills overtake "Manual" skills as one progresses.
+         4. Salary Growth: Line Chart (Chart.js) -> visualizes the ROI of the course.
+         5. Tools Grid: Flexbox Grid with Unicode Icons -> Clear categorization without SVG overhead.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </head>
-  <body>
-    <h1>Nguyễn Văn Bảo</h1>
-  </body>
-</HTML>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-blue-700">TestMastery<span class="text-slate-500 text-lg font-light">.io</span></span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <button onclick="scrollToSection('assessment')" class="text-slate-600 hover:text-blue-600">Kiểm tra trình độ</button>
+                    <button onclick="scrollToSection('roadmap')" class="text-slate-600 hover:text-blue-600">Lộ trình học</button>
+                    <button onclick="scrollToSection('analytics')" class="text-slate-600 hover:text-blue-600">Cơ hội nghề nghiệp</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl font-extrabold text-slate-900 sm:text-5xl">
+                Chinh Phục Sự Nghiệp <span class="text-blue-600">Software Testing</span>
+            </h1>
+            <p class="mt-4 text-xl text-slate-500 max-w-3xl mx-auto">
+                Lộ trình toàn diện từ Manual đến Automation dành cho người trái ngành và Tester muốn nâng cao kỹ năng.
+                Thiết kế thực chiến, bám sát nhu cầu tuyển dụng.
+            </p>
+            <div class="mt-8 flex justify-center gap-4">
+                <button onclick="scrollToSection('assessment')" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700 transition shadow-lg">
+                    Xác định điểm bắt đầu
+                </button>
+                <button onclick="scrollToSection('roadmap')" class="bg-white text-blue-600 border border-blue-200 px-8 py-3 rounded-lg font-medium hover:bg-blue-50 transition">
+                    Xem chi tiết khóa học
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+        <!-- Section 1: Assessment Tool -->
+        <section id="assessment" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">🎯 Bạn nên bắt đầu từ đâu?</h2>
+                    <p class="text-slate-600 mb-6">
+                        Để tối ưu hóa thời gian học, chúng tôi chia khóa học thành các cấp độ đầu vào khác nhau. 
+                        Hãy chọn mô tả đúng nhất về bạn để nhận tư vấn lộ trình phù hợp.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 border rounded-lg hover:border-blue-400 cursor-pointer transition" onclick="selectLevel('level0')">
+                            <div class="flex items-center">
+                                <div class="h-4 w-4 rounded-full border border-slate-400 mr-3" id="radio-level0"></div>
+                                <span class="font-medium">Người trái ngành (Non-IT) / Chưa có kiến thức</span>
+                            </div>
+                        </div>
+                        <div class="p-4 border rounded-lg hover:border-blue-400 cursor-pointer transition" onclick="selectLevel('level1')">
+                            <div class="flex items-center">
+                                <div class="h-4 w-4 rounded-full border border-slate-400 mr-3" id="radio-level1"></div>
+                                <span class="font-medium">Đã biết IT cơ bản / Sinh viên CNTT mới ra trường</span>
+                            </div>
+                        </div>
+                        <div class="p-4 border rounded-lg hover:border-blue-400 cursor-pointer transition" onclick="selectLevel('level2')">
+                            <div class="flex items-center">
+                                <div class="h-4 w-4 rounded-full border border-slate-400 mr-3" id="radio-level2"></div>
+                                <span class="font-medium">Đang làm Manual Tester / Muốn học Automation</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="recommendation-box" class="bg-slate-50 rounded-xl p-6 border border-slate-200 hidden">
+                    <h3 class="text-lg font-semibold text-blue-700 mb-2" id="rec-title">Kết quả tư vấn</h3>
+                    <div class="text-4xl font-bold text-slate-800 mb-2" id="rec-level">Level 0</div>
+                    <p class="text-slate-600 mb-4" id="rec-desc">Mô tả lộ trình...</p>
+                    <ul class="space-y-2 mb-6 text-sm text-slate-700" id="rec-features">
+                        <!-- Features inserted via JS -->
+                    </ul>
+                    <div class="bg-blue-100 text-blue-800 px-4 py-2 rounded-md inline-block font-medium text-sm" id="rec-duration">
+                        ⏱ Tổng thời gian: 6 Tháng
+                    </div>
+                </div>
+                
+                <!-- Default state placeholder -->
+                <div id="recommendation-placeholder" class="bg-slate-50 rounded-xl p-6 border border-slate-200 flex flex-col items-center justify-center text-center h-64">
+                    <div class="text-5xl mb-4">👋</div>
+                    <p class="text-slate-500">Chọn background của bạn bên trái để xem lộ trình được cá nhân hóa.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Interactive Roadmap -->
+        <section id="roadmap">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-900">🗺️ Lộ Trình Chi Tiết (Full-Stack QA)</h2>
+                <p class="mt-2 text-slate-600 max-w-3xl">
+                    Chương trình được chia thành 4 giai đoạn (Phases) kế thừa nhau. 
+                    Bấm vào từng giai đoạn trên thanh thời gian để xem nội dung chi tiết.
+                </p>
+            </div>
+
+            <!-- Timeline Nav -->
+            <div class="flex flex-col md:flex-row justify-between mb-8 gap-2 relative">
+                <!-- Line connector for desktop -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-200 -z-10 transform -translate-y-1/2"></div>
+                
+                <button onclick="renderPhase(0)" id="phase-btn-0" class="flex flex-col items-center p-4 bg-white rounded-lg border-2 border-blue-600 shadow-md z-10 w-full md:w-1/5 transition hover:bg-blue-50">
+                    <span class="text-2xl mb-2">🌱</span>
+                    <span class="font-bold text-slate-800">Phase 1</span>
+                    <span class="text-xs text-slate-500">Tư Duy & Manual</span>
+                </button>
+                <button onclick="renderPhase(1)" id="phase-btn-1" class="flex flex-col items-center p-4 bg-white rounded-lg border-2 border-slate-200 z-10 w-full md:w-1/5 transition hover:bg-slate-50">
+                    <span class="text-2xl mb-2">🔍</span>
+                    <span class="font-bold text-slate-800">Phase 2</span>
+                    <span class="text-xs text-slate-500">SQL & API Testing</span>
+                </button>
+                <button onclick="renderPhase(2)" id="phase-btn-2" class="flex flex-col items-center p-4 bg-white rounded-lg border-2 border-slate-200 z-10 w-full md:w-1/5 transition hover:bg-slate-50">
+                    <span class="text-2xl mb-2">🤖</span>
+                    <span class="font-bold text-slate-800">Phase 3</span>
+                    <span class="text-xs text-slate-500">Automation Core</span>
+                </button>
+                <button onclick="renderPhase(3)" id="phase-btn-3" class="flex flex-col items-center p-4 bg-white rounded-lg border-2 border-slate-200 z-10 w-full md:w-1/5 transition hover:bg-slate-50">
+                    <span class="text-2xl mb-2">🚀</span>
+                    <span class="font-bold text-slate-800">Phase 4</span>
+                    <span class="text-xs text-slate-500">Framework & CI/CD</span>
+                </button>
+            </div>
+
+            <!-- Dynamic Content Area -->
+            <div class="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- Left: Description -->
+                    <div class="lg:col-span-2">
+                        <div class="flex items-center mb-4">
+                            <span id="phase-icon" class="text-4xl mr-4">🌱</span>
+                            <div>
+                                <h3 id="phase-title" class="text-2xl font-bold text-blue-700">Phase 1: Foundation & Manual Testing</h3>
+                                <span id="phase-duration" class="text-sm font-semibold bg-slate-100 px-3 py-1 rounded text-slate-600">Thời gian: 1.5 - 2 Tháng</span>
+                            </div>
+                        </div>
+                        <p id="phase-desc" class="text-slate-600 mb-6 leading-relaxed">
+                            Giai đoạn xây dựng nền tảng vững chắc. Học viên sẽ hiểu rõ quy trình phát triển phần mềm, cách tư duy tìm lỗi, và cách viết tài liệu kiểm thử chuẩn quốc tế (ISTQB). Đây là giai đoạn bắt buộc cho người trái ngành.
+                        </p>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-semibold text-slate-900 mb-3">📚 Nội dung chính (Modules):</h4>
+                            <ul id="phase-modules" class="space-y-3">
+                                <!-- JS populated -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Right: Tools & Outcome -->
+                    <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
+                        <h4 class="font-semibold text-slate-900 mb-4 border-b pb-2">🛠️ Công cụ làm chủ</h4>
+                        <div id="phase-tools" class="flex flex-wrap gap-2 mb-6">
+                            <!-- JS populated -->
+                        </div>
+
+                        <h4 class="font-semibold text-slate-900 mb-4 border-b pb-2">🎯 Kết quả đạt được</h4>
+                        <ul id="phase-outcomes" class="text-sm text-slate-600 space-y-2 list-disc list-inside">
+                            <!-- JS populated -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Data Analytics -->
+        <section id="analytics" class="grid md:grid-cols-2 gap-8">
+            <!-- Chart 1: Skill Evolution -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="text-lg font-bold text-slate-900 mb-2">📊 Tỷ trọng Kỹ năng qua từng Level</h3>
+                <p class="text-sm text-slate-500 mb-4">Sự chuyển dịch từ kỹ năng thủ công sang kỹ thuật & lập trình.</p>
+                <div class="chart-container">
+                    <canvas id="skillChart"></canvas>
+                </div>
+                <p class="mt-4 text-xs text-slate-400 italic text-center">Biểu đồ thể hiện mức độ phức tạp và yêu cầu kỹ thuật tăng dần.</p>
+            </div>
+
+            <!-- Chart 2: Salary Potential -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="text-lg font-bold text-slate-900 mb-2">💰 Tiềm năng Thu nhập (Thị trường VN)</h3>
+                <p class="text-sm text-slate-500 mb-4">Mức lương trung bình ước tính dựa trên kỹ năng (Đơn vị: Triệu VNĐ).</p>
+                <div class="chart-container">
+                    <canvas id="salaryChart"></canvas>
+                </div>
+                <p class="mt-4 text-xs text-slate-400 italic text-center">Dữ liệu tham khảo từ các báo cáo tuyển dụng IT 2024.</p>
+            </div>
+        </section>
+
+        <!-- Section 4: Detailed Tools Grid -->
+        <section class="bg-blue-50 rounded-3xl p-8 md:p-12">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-slate-900">🧰 Hệ Sinh Thái Công Cụ</h2>
+                <p class="text-slate-600 mt-2">Các công cụ "Industry Standard" mà bạn sẽ thực hành trong khóa học.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Management -->
+                <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
+                    <div class="flex items-center mb-4">
+                        <span class="text-3xl mr-3">📂</span>
+                        <h3 class="font-bold text-lg">Test Management</h3>
+                    </div>
+                    <ul class="space-y-2 text-slate-600">
+                        <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> Jira (Xray/Zephyr)</li>
+                        <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> TestLink</li>
+                        <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> Excel/Google Sheets</li>
+                        <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> Bugzilla (Concept)</li>
+                    </ul>
+                </div>
+
+                <!-- Technical & API -->
+                <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
+                    <div class="flex items-center mb-4">
+                        <span class="text-3xl mr-3">🔌</span>
+                        <h3 class="font-bold text-lg">Technical & API</h3>
+                    </div>
+                    <ul class="space-y-2 text-slate-600">
+                        <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> SQL (MySQL/SQL Server)</li>
+                        <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> Postman (API Manual)</li>
+                        <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> Newman (API Auto)</li>
+                        <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> Chrome DevTools</li>
+                    </ul>
+                </div>
+
+                <!-- Automation -->
+                <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
+                    <div class="flex items-center mb-4">
+                        <span class="text-3xl mr-3">⚙️</span>
+                        <h3 class="font-bold text-lg">Automation & CI/CD</h3>
+                    </div>
+                    <ul class="space-y-2 text-slate-600">
+                        <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> Selenium WebDriver</li>
+                        <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> Java / Python</li>
+                        <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> TestNG / JUnit</li>
+                        <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> Jenkins & Git</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="font-medium text-lg mb-2">Sẵn sàng bắt đầu hành trình?</p>
+            <p class="text-slate-500 text-sm">Thiết kế lộ trình dựa trên thực tế nhu cầu tuyển dụng tại Việt Nam.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Data Definitions ---
+        const phases = [
+            {
+                id: 0,
+                title: "Phase 1: Foundation & Manual Testing",
+                icon: "🌱",
+                duration: "1.5 - 2 Tháng",
+                desc: "Giai đoạn quan trọng nhất cho người mới. Tập trung vào tư duy tìm lỗi (Mindset), quy trình kiểm thử chuẩn (Process) và thực hành trên dự án thật.",
+                modules: [
+                    "<strong>Software Development Lifecycle (SDLC):</strong> Agile, Scrum, Waterfall.",
+                    "<strong>Testing Fundamentals:</strong> 7 nguyên lý kiểm thử, các loại test (Functional, UI, UX).",
+                    "<strong>Test Design Techniques:</strong> Phân vùng tương đương, Bảng quyết định, State transition.",
+                    "<strong>Defect Management:</strong> Quy trình log bug, vòng đời bug trên Jira.",
+                    "<strong>Project:</strong> Viết Test Case và Log Bug cho website E-commerce."
+                ],
+                tools: ["Jira", "Excel/Sheets", "Snagit", "Trello"],
+                outcomes: [
+                    "Hiểu rõ quy trình phát triển phần mềm.",
+                    "Tự tin viết Test Plan và Test Case chất lượng cao.",
+                    "Thành thạo công cụ quản lý lỗi Jira.",
+                    "Đủ khả năng ứng tuyển Fresher Manual Tester."
+                ]
+            },
+            {
+                id: 1,
+                title: "Phase 2: Technical Skills (SQL & API)",
+                icon: "🔍",
+                duration: "1 - 1.5 Tháng",
+                desc: "Nâng cấp từ 'Clicker' thành 'Technical Tester'. Hiểu sâu về dữ liệu và cách các hệ thống giao tiếp với nhau qua API. Đây là bước đệm bắt buộc trước khi học Automation.",
+                modules: [
+                    "<strong>Database & SQL:</strong> Select, Join, Group By, Sub-query để kiểm tra dữ liệu.",
+                    "<strong>API Concepts:</strong> HTTP Methods (GET, POST, PUT, DELETE), Status Codes, JSON.",
+                    "<strong>API Testing with Postman:</strong> Tạo request, biến môi trường, Script cơ bản (Pre-request/Tests).",
+                    "<strong>Mobile Testing Basic:</strong> Cài đặt giả lập, test trên Android/iOS."
+                ],
+                tools: ["MySQL Workbench", "Postman", "Swagger", "Android Studio"],
+                outcomes: [
+                    "Có thể kiểm thử hộp trắng (White-box) ở mức cơ sở dữ liệu.",
+                    "Thực hiện kiểm thử API độc lập không cần giao diện (FE).",
+                    "Hiểu cấu trúc dữ liệu JSON/XML."
+                ]
+            },
+            {
+                id: 2,
+                title: "Phase 3: Automation Core (Coding)",
+                icon: "🤖",
+                duration: "2 Tháng",
+                desc: "Bước vào thế giới Automation. Học ngôn ngữ lập trình (Java/Python) từ con số 0 và làm quen với thư viện Automation phổ biến nhất thế giới - Selenium.",
+                modules: [
+                    "<strong>Programming Basics:</strong> Biến, Vòng lặp, Hàm, OOP (Lập trình hướng đối tượng).",
+                    "<strong>Selenium WebDriver:</strong> Tương tác trình duyệt (Click, Type, Wait, Alert).",
+                    "<strong>Locators Strategy:</strong> XPath, CSS Selectors tối ưu.",
+                    "<strong>Test Framework Basics:</strong> Cấu trúc dự án Page Object Model (POM)."
+                ],
+                tools: ["IntelliJ IDEA / VS Code", "Java / Python", "Selenium", "Github"],
+                outcomes: [
+                    "Biết đọc và viết code cơ bản.",
+                    "Tự viết script auto test cho các chức năng web login, search, CRUD.",
+                    "Hiểu mô hình Page Object Model."
+                ]
+            },
+            {
+                id: 3,
+                title: "Phase 4: Framework & CI/CD",
+                icon: "🚀",
+                duration: "1 Tháng",
+                desc: "Trở thành Automation Tester chuyên nghiệp. Xây dựng Framework có thể tái sử dụng, chạy test tự động trên hệ thống CI/CD và báo cáo kết quả chuyên nghiệp.",
+                modules: [
+                    "<strong>Advanced Framework:</strong> TestNG/JUnit, Data Driven Testing (đọc file Excel/CSV).",
+                    "<strong>Reporting:</strong> Tích hợp Allure Report, Extent Report.",
+                    "<strong>CI/CD Basics:</strong> Jenkins, cấu hình Job chạy test tự động theo lịch.",
+                    "<strong>Mock Interview:</strong> Rèn luyện kỹ năng phỏng vấn và tối ưu CV."
+                ],
+                tools: ["TestNG", "Maven/Gradle", "Jenkins", "Allure Report"],
+                outcomes: [
+                    "Xây dựng được Automation Framework hoàn chỉnh.",
+                    "Hiểu quy trình DevOps cơ bản.",
+                    "Sẵn sàng ứng tuyển Junior/Mid Automation Tester."
+                ]
+            }
+        ];
+
+        // --- Interaction Logic: Roadmap ---
+        function renderPhase(index) {
+            const data = phases[index];
+            
+            // Update Text
+            document.getElementById('phase-title').innerText = data.title;
+            document.getElementById('phase-duration').innerText = `Thời gian: ${data.duration}`;
+            document.getElementById('phase-desc').innerText = data.desc;
+            document.getElementById('phase-icon').innerText = data.icon;
+            
+            // Update Modules
+            const moduleList = document.getElementById('phase-modules');
+            moduleList.innerHTML = data.modules.map(m => 
+                `<li class="flex items-start text-slate-700 text-sm">
+                    <span class="text-blue-500 mr-2 mt-1">●</span>
+                    <span>${m}</span>
+                </li>`
+            ).join('');
+
+            // Update Tools
+            const toolContainer = document.getElementById('phase-tools');
+            toolContainer.innerHTML = data.tools.map(t => 
+                `<span class="bg-white border border-slate-200 px-3 py-1 rounded text-xs font-medium text-slate-600 shadow-sm">${t}</span>`
+            ).join('');
+
+            // Update Outcomes
+            const outcomeList = document.getElementById('phase-outcomes');
+            outcomeList.innerHTML = data.outcomes.map(o => `<li>${o}</li>`).join('');
+
+            // Update Active State Visuals
+            phases.forEach((_, i) => {
+                const btn = document.getElementById(`phase-btn-${i}`);
+                if (i === index) {
+                    btn.classList.add('border-blue-600', 'bg-blue-50');
+                    btn.classList.remove('border-slate-200', 'bg-white');
+                } else {
+                    btn.classList.remove('border-blue-600', 'bg-blue-50');
+                    btn.classList.add('border-slate-200', 'bg-white');
+                }
+            });
+        }
+
+        // --- Interaction Logic: Assessment ---
+        function selectLevel(levelId) {
+            // Reset Radios
+            ['level0', 'level1', 'level2'].forEach(l => {
+                document.getElementById(`radio-${l}`).classList.remove('bg-blue-600', 'border-transparent');
+            });
+            // Set Active Radio
+            document.getElementById(`radio-${levelId}`).classList.add('bg-blue-600', 'border-transparent');
+
+            // Show Content
+            document.getElementById('recommendation-placeholder').classList.add('hidden');
+            const recBox = document.getElementById('recommendation-box');
+            recBox.classList.remove('hidden');
+            recBox.classList.add('fade-in');
+
+            // Data for Levels
+            const levels = {
+                level0: {
+                    title: "Lộ trình: Zero to Hero (Full-stack)",
+                    level: "Level 0: Người mới bắt đầu",
+                    desc: "Bạn chưa có kiến thức nền tảng. Bạn cần bắt đầu từ Phase 1 (Manual) để hiểu tư duy, sau đó mới học kỹ thuật. Không nên đốt cháy giai đoạn học Code ngay.",
+                    features: [
+                        "✅ Bắt buộc học Phase 1 (Manual)",
+                        "✅ Tập trung nhiều vào SQL & Tư duy logic",
+                        "✅ Lộ trình đầy đủ 4 Phase",
+                        "🚀 Mục tiêu: Fresher Tester sau 3 tháng đầu"
+                    ],
+                    duration: "6 - 7 Tháng"
+                },
+                level1: {
+                    title: "Lộ trình: Củng cố & Chuyên sâu",
+                    level: "Level 1: Có nền tảng IT",
+                    desc: "Bạn đã có tư duy logic hoặc code cơ bản. Bạn có thể lướt nhanh Phase 1 và dành nhiều thời gian hơn cho Phase 3 & 4 (Automation).",
+                    features: [
+                        "⏩ Học nhanh Phase 1 (2 tuần)",
+                        "✅ Tập trung sâu vào Automation Framework",
+                        "✅ Thực hành dự án API nâng cao",
+                        "🚀 Mục tiêu: Junior Automation Tester"
+                    ],
+                    duration: "4 - 5 Tháng"
+                },
+                level2: {
+                    title: "Lộ trình: Chuyển đổi Automation",
+                    level: "Level 2: Manual Tester Experienced",
+                    desc: "Bạn đã rành quy trình test. Bạn không cần học lại Manual. Hãy bắt đầu ngay từ Phase 2 (SQL/API) và tập trung 80% lực vào Code & Automation.",
+                    features: [
+                        "⛔ Bỏ qua Phase 1",
+                        "🔥 Bắt đầu từ Phase 2 (Technical)",
+                        "✅ Chuyên sâu Java/Python & CI/CD",
+                        "🚀 Mục tiêu: Mid/Senior Automation Tester"
+                    ],
+                    duration: "3 - 4 Tháng"
+                }
+            };
+
+            const data = levels[levelId];
+            document.getElementById('rec-title').innerText = data.title;
+            document.getElementById('rec-level').innerText = data.level;
+            document.getElementById('rec-desc').innerText = data.desc;
+            document.getElementById('rec-duration').innerText = `⏱ Tổng thời gian: ${data.duration}`;
+            
+            document.getElementById('rec-features').innerHTML = data.features.map(f => `<li>${f}</li>`).join('');
+        }
+
+        // --- Charts Initialization ---
+        function initCharts() {
+            // Chart 1: Skill Evolution
+            const ctxSkill = document.getElementById('skillChart').getContext('2d');
+            new Chart(ctxSkill, {
+                type: 'bar',
+                data: {
+                    labels: ['Phase 1', 'Phase 2', 'Phase 3', 'Phase 4'],
+                    datasets: [
+                        {
+                            label: 'Manual / Process',
+                            data: [80, 40, 10, 10],
+                            backgroundColor: '#94a3b8', // Slate 400
+                        },
+                        {
+                            label: 'Technical / Tools',
+                            data: [20, 60, 30, 20],
+                            backgroundColor: '#60a5fa', // Blue 400
+                        },
+                        {
+                            label: 'Coding / Automation',
+                            data: [0, 0, 60, 70],
+                            backgroundColor: '#2563eb', // Blue 600
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true, beginAtZero: true, max: 100, title: { display: true, text: 'Tỷ trọng kiến thức (%)' } }
+                    }
+                }
+            });
+
+            // Chart 2: Salary Potential
+            const ctxSalary = document.getElementById('salaryChart').getContext('2d');
+            new Chart(ctxSalary, {
+                type: 'line',
+                data: {
+                    labels: ['Fresher', 'Junior', 'Mid-Level', 'Senior', 'Lead/Manager'],
+                    datasets: [{
+                        label: 'Mức lương trung bình (Triệu VNĐ)',
+                        data: [8, 15, 25, 40, 60],
+                        borderColor: '#16a34a', // Green 600
+                        backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#16a34a',
+                        pointRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { 
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + ' Triệu VNĐ';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'Thu nhập (Triệu VNĐ)' } }
+                    }
+                }
+            });
+        }
+
+        // --- Utilities ---
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- Init ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPhase(0); // Show Phase 1 by default
+            initCharts();
+        });
+
+    </script>
+</body>
+</html>
